@@ -1,25 +1,16 @@
-import { usePopupStore } from '../store/popup-store';
-
 function UnauthenticatedView() {
-  const mockLogin = usePopupStore((s) => s.mockLogin);
-  const mockSignup = usePopupStore((s) => s.mockSignup);
-
-  const handleSignIn = async () => {
-    await mockLogin('user@example.com');
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.windowId) {
-        chrome.sidePanel.open({ windowId: tabs[0].windowId });
+  const handleOpenSidePanel = async () => {
+    try {
+      const tabs = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
+      if (tabs.length > 0 && tabs[0].id) {
+        await chrome.sidePanel.open({ tabId: tabs[0].id });
       }
-    });
-  };
-
-  const handleCreateAccount = async () => {
-    await mockSignup('user@example.com');
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.windowId) {
-        chrome.sidePanel.open({ windowId: tabs[0].windowId });
-      }
-    });
+    } catch {
+      // ignore
+    }
   };
 
   return (
@@ -81,7 +72,7 @@ function UnauthenticatedView() {
       >
         <button
           type="button"
-          onClick={handleSignIn}
+          onClick={handleOpenSidePanel}
           style={{
             width: '100%',
             padding: '12px 16px',
@@ -97,25 +88,6 @@ function UnauthenticatedView() {
           }}
         >
           Sign In
-        </button>
-
-        <button
-          type="button"
-          onClick={handleCreateAccount}
-          style={{
-            width: '100%',
-            padding: '12px 16px',
-            backgroundColor: '#FFFFFF',
-            color: '#0A0A0A',
-            border: '1px solid rgba(10,10,10,0.1)',
-            borderRadius: '8px',
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '15px',
-            fontWeight: 500,
-            cursor: 'pointer',
-          }}
-        >
-          Create Account
         </button>
       </div>
     </div>

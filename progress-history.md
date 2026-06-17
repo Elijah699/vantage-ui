@@ -25,8 +25,9 @@
 | 14    | Onboarding Tooltip Sequence      | ✅ Complete |
 | 15    | Landing Page (Next.js)           | ✅ Complete |
 | 16    | Backend Foundation & Schema      | ✅ Complete |
+| 17    | Auth API & Extension Integration | ✅ Complete |
 
-- **Completed:** 16 / 16 phases
+- **Completed:** 17 / 17 phases
 - **Remaining:** 0 phases
 
 ---
@@ -272,6 +273,24 @@
 | 9   | Configure environment variables     | ✅     | `.env.example` updated with all backend vars. `.env` has `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.                              |
 
 **Build:** `pnpm --filter landing build` passes ✅
+
+---
+
+## Phase 17 — Authentication API & Extension Integration ✅
+
+| #   | Task                                          | Status | Notes                                                                                                                          |
+| --- | --------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Create auth middleware for protected routes   | ✅     | `apps/landing/src/lib/auth/middleware.ts` — `requireAuth()` validates Bearer JWT against Supabase                              |
+| 2   | Build `POST /api/auth/signup`                 | ✅     | Zod validation (email + password min 8). Calls `supabase.auth.signUp()`. Returns user + session or 400 error                   |
+| 3   | Build `POST /api/auth/login`                  | ✅     | Zod validation. Calls `supabase.auth.signInWithPassword()`. Returns user + session or 401                                      |
+| 4   | Build `POST /api/auth/logout`                 | ✅     | Protected route. Calls `supabase.auth.signOut()`. Returns `{ success: true }`                                                  |
+| 5   | Build `GET /api/auth/me`                      | ✅     | Protected route. Returns `{ user, credits }` from public.users + public.credits tables                                         |
+| 6   | Create reusable extension API client          | ✅     | `apps/extension/src/lib/api-client.ts` — HttpClient with JWT auto-attach, 401 handling, storage abstraction                    |
+| 7   | Replace `mockLogin`/`mockSignup`/`mockLogout` | ✅     | `popup-store.ts` — `login()`, `signup()`, `logout()` call real API routes, store JWT in chrome.storage                         |
+| 8   | Add session restore on startup                | ✅     | `restoreSession()` in popup-store, called on mount in both `popup.tsx` and `sidepanel.tsx`                                     |
+| 9   | Remove dev auth toggle and mock auth          | ✅     | Deleted `dev-auth-toggle.tsx`. Removed `toggleAuth()`, all mock auth from store. Unauthenticated view now routes to side panel |
+
+**Builds:** `pnpm --filter landing build` ✅ | `pnpm --filter extension build` ✅
 
 ---
 

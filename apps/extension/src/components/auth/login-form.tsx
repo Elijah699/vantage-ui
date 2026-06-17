@@ -13,7 +13,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
-  const mockLogin = usePopupStore((s) => s.mockLogin);
+  const login = usePopupStore((s) => s.login);
   const authState = usePopupStore((s) => s.authState);
   const error = usePopupStore((s) => s.error);
   const isLoading = authState === 'loading';
@@ -27,7 +27,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    await mockLogin(data.email);
+    await login(data.email, data.password);
   };
 
   return (

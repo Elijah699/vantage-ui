@@ -13,7 +13,7 @@ interface SignupFormProps {
 }
 
 export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
-  const mockSignup = usePopupStore((s) => s.mockSignup);
+  const signup = usePopupStore((s) => s.signup);
   const authState = usePopupStore((s) => s.authState);
   const error = usePopupStore((s) => s.error);
   const isLoading = authState === 'loading';
@@ -27,11 +27,13 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   });
 
   const onSubmit = async (data: SignupFormData) => {
-    await mockSignup(data.email);
-    toast({
-      title: 'Welcome! 5 free credits added to your account.',
-      description: "You're all set to start using VantageUI.",
-    });
+    await signup(data.email, data.password);
+    if (usePopupStore.getState().authState === 'authenticated') {
+      toast({
+        title: 'Welcome! 5 free credits added to your account.',
+        description: "You're all set to start using VantageUI.",
+      });
+    }
   };
 
   return (

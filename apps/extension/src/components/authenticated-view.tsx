@@ -10,7 +10,7 @@ function AuthenticatedView() {
   const inspectorActive = usePopupStore((s) => s.inspectorActive);
   const setInspectorActive = usePopupStore((s) => s.setInspectorActive);
   const toggleInspector = usePopupStore((s) => s.toggleInspector);
-  const mockLogout = usePopupStore((s) => s.mockLogout);
+  const logout = usePopupStore((s) => s.logout);
   const [isToggling, setIsToggling] = useState(false);
   const retryCountRef = useRef(0);
 
@@ -32,13 +32,18 @@ function AuthenticatedView() {
     };
   }, [setInspectorActive]);
 
-  const sendToggleMessage = async (tabId: number, retries = 3): Promise<boolean> => {
+  const sendToggleMessage = async (
+    tabId: number,
+    retries = 3,
+  ): Promise<boolean> => {
     try {
       await chrome.tabs.sendMessage(tabId, { type: 'TOGGLE_INSPECTOR' });
       return true;
     } catch {
       if (retries <= 1) return false;
-      await new Promise<void>((resolve) => { setTimeout(() => resolve(), 200); });
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 200);
+      });
       return sendToggleMessage(tabId, retries - 1);
     }
   };
@@ -255,7 +260,7 @@ function AuthenticatedView() {
               // tab may not exist, ignore
             }
           }
-          mockLogout();
+          logout();
         }}
         style={{
           alignSelf: 'flex-end',

@@ -1,6 +1,5 @@
-import { useCallback } from 'react';
-
 import { Info, RotateCcw } from 'lucide-react';
+import { useCallback } from 'react';
 
 import { useOnboardingStore } from '../../../store/onboardingSlice';
 import { usePopupStore } from '../../../store/popup-store';
@@ -48,15 +47,15 @@ function SettingsTab() {
   const resetOnboarding = useOnboardingStore((s) => s.resetOnboarding);
   const userEmail = usePopupStore((s) => s.userEmail);
   const authState = usePopupStore((s) => s.authState);
-  const mockLogout = usePopupStore((s) => s.mockLogout);
+  const logout = usePopupStore((s) => s.logout);
 
   const handleResetOnboarding = useCallback(() => {
     resetOnboarding();
   }, [resetOnboarding]);
 
   const handleSignOut = useCallback(() => {
-    mockLogout();
-  }, [mockLogout]);
+    logout();
+  }, [logout]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

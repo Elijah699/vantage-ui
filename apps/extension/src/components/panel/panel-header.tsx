@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-
 import { Avatar, AvatarFallback, CreditBadge } from '@vantage-ui/ui';
+import {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 
 import { usePopupStore } from '../../store/popup-store';
 
@@ -29,7 +30,7 @@ function PanelHeader() {
   const creditBalance = usePopupStore((s) => s.creditBalance);
   const userEmail = usePopupStore((s) => s.userEmail);
   const authState = usePopupStore((s) => s.authState);
-  const mockLogout = usePopupStore((s) => s.mockLogout);
+  const logout = usePopupStore((s) => s.logout);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -76,8 +77,17 @@ function PanelHeader() {
         </span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative' }}>
-        {authState === 'authenticated' && <CreditBadge balance={creditBalance} size="sm" />}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          position: 'relative',
+        }}
+      >
+        {authState === 'authenticated' && (
+          <CreditBadge balance={creditBalance} size="sm" />
+        )}
         <div ref={menuRef}>
           <button
             type="button"
@@ -141,7 +151,7 @@ function PanelHeader() {
                 type="button"
                 onClick={() => {
                   setMenuOpen(false);
-                  mockLogout();
+                  logout();
                 }}
                 style={{
                   display: 'flex',

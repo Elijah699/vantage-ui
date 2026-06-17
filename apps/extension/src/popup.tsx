@@ -3,7 +3,6 @@ import '@vantage-ui/ui/src/globals.css';
 import { useCallback, useEffect, useState } from 'react';
 
 import { AuthenticatedView } from './components/authenticated-view';
-import { DevAuthToggle } from './components/dev-auth-toggle';
 import { PopupHeader } from './components/popup-header';
 import { UnauthenticatedView } from './components/unauthenticated-view';
 import { usePopupStore } from './store/popup-store';
@@ -12,6 +11,7 @@ function PopupContent() {
   const [hydrated, setHydrated] = useState(usePopupStore.persist.hasHydrated());
   const [hydrationTimedOut, setHydrationTimedOut] = useState(false);
   const authState = usePopupStore((s) => s.authState);
+  const restoreSession = usePopupStore((s) => s.restoreSession);
 
   const rehydrate = useCallback(() => {
     usePopupStore.persist.rehydrate();
@@ -21,6 +21,13 @@ function PopupContent() {
     const unsub = usePopupStore.persist.onFinishHydration(() => setHydrated(true));
     return () => unsub();
   }, []);
+
+  // Session restore on mount
+  useEffect(() => {
+    if (hydrated) {
+      restoreSession();
+    }
+  }, [hydrated, restoreSession]);
 
   // Hydration timeout fallback
   useEffect(() => {
@@ -98,9 +105,13 @@ function PopupContent() {
           </svg>
         </div>
       )}
-      {hydrationTimedOut && authState !== 'authenticated' && <UnauthenticatedView />}
-      {!hydrationTimedOut && hydrated && authState !== 'authenticated' && authState !== 'loading' && <UnauthenticatedView />}
-      <DevAuthToggle />
+      {hydrationTimedOut && authState !== 'authenticated' && (
+        <UnauthenticatedView />
+      )}
+      {!hydrationTimedOut
+        && hydrated
+        && authState !== 'authenticated'
+        && authState !== 'loading' && <UnauthenticatedView />}
     </div>
   );
 }

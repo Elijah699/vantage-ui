@@ -59,6 +59,7 @@ function SidePanelInner() {
   const [hydrated, setHydrated] = useState(usePopupStore.persist.hasHydrated());
   const [hydrationTimedOut, setHydrationTimedOut] = useState(false);
   const authState = usePopupStore((s) => s.authState);
+  const restoreSession = usePopupStore((s) => s.restoreSession);
 
   const rehydrate = useCallback(() => {
     usePopupStore.persist.rehydrate();
@@ -68,6 +69,13 @@ function SidePanelInner() {
     const unsub = usePopupStore.persist.onFinishHydration(() => setHydrated(true));
     return () => unsub();
   }, []);
+
+  // Session restore on mount
+  useEffect(() => {
+    if (hydrated) {
+      restoreSession();
+    }
+  }, [hydrated, restoreSession]);
 
   // Hydration timeout fallback
   useEffect(() => {
@@ -144,7 +152,10 @@ function SidePanelInner() {
         </div>
       )}
       {hydrationTimedOut && authState !== 'authenticated' && <AuthGate />}
-      {!hydrationTimedOut && hydrated && authState !== 'authenticated' && authState !== 'loading' && <AuthGate />}
+      {!hydrationTimedOut
+        && hydrated
+        && authState !== 'authenticated'
+        && authState !== 'loading' && <AuthGate />}
       {/* Global toast notifications */}
       <Toaster />
     </div>
