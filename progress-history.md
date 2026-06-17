@@ -1,7 +1,7 @@
 # VantageUI — Progress History
 
 > Auto-generated progress tracker. **Every task MUST update this file** upon completion.
-> Last updated: 2026-05-21 (Phase 15 completed, landing page)
+> Last updated: 2026-06-17 (Phase 16 completed, backend foundation)
 
 ---
 
@@ -24,8 +24,9 @@
 | 13    | Credits & Billing UI             | ✅ Complete |
 | 14    | Onboarding Tooltip Sequence      | ✅ Complete |
 | 15    | Landing Page (Next.js)           | ✅ Complete |
+| 16    | Backend Foundation & Schema      | ✅ Complete |
 
-- **Completed:** 15 / 15 phases
+- **Completed:** 16 / 16 phases
 - **Remaining:** 0 phases
 
 ---
@@ -251,6 +252,26 @@
 | 9   | Build `SocialProofSection`             | ✅     | Waitlist count + tech logo row with grayscale-to-color hover                                                             |
 | 10  | Build `Footer` component               | ✅     | Logo, tagline, placeholder links, copyright                                                                              |
 | 11  | Validate responsiveness + Lighthouse   | ⚠️     | Build passes, responsive layout verified via code review.<br>Lighthouse audit needs manual browser run against dev build |
+
+---
+
+---
+
+## Phase 16 — Backend Foundation & Database Schema ✅
+
+| #   | Task                                | Status | Notes                                                                                                                                                 |
+| --- | ----------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Configure Supabase project & auth   | ✅     | Supabase project created. Anon key + URL set in `.env`. Auth enabled (email/password).                                                                |
+| 2   | Create database schema — all tables | ✅     | SQL migration in `supabase-schema.sql`. Tables: `users`, `credits`, `credit_transactions`, `extractions`, `waitlist`. **Run in Supabase SQL Editor.** |
+| 3   | Create `handle_new_user()` trigger  | ✅     | Included in `supabase-schema.sql`. Grants 5 welcome credits on signup. **Run in Supabase SQL Editor.**                                                |
+| 4   | Enable RLS and create policies      | ✅     | Included in `supabase-schema.sql`. RLS on all tables with per-user policies. **Run in Supabase SQL Editor.**                                          |
+| 5   | Install backend dependencies        | ✅     | `@supabase/supabase-js`, `@supabase/ssr`, `stripe`, `@anthropic-ai/sdk`, `openai`, `@upstash/ratelimit`, `@vercel/kv`                                 |
+| 6   | Create Supabase client utilities    | ✅     | `server.ts`, `client.ts`, `middleware.ts`, `admin.ts` in `src/lib/supabase/`                                                                          |
+| 7   | Create shared TypeScript types      | ✅     | `src/lib/types/api.ts` — AuthResponse, CreditBalanceResponse, ExtractionRequest, WaitlistRequest, ApiError, etc.                                      |
+| 8   | Create API directory structure      | ✅     | 11 route files in `src/app/api/` — auth(4), credits(3), extractions(2), webhooks(1), waitlist(1), health(1). All return 501 placeholder.              |
+| 9   | Configure environment variables     | ✅     | `.env.example` updated with all backend vars. `.env` has `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.                              |
+
+**Build:** `pnpm --filter landing build` passes ✅
 
 ---
 

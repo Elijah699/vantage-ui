@@ -41,8 +41,7 @@ export function Navbar() {
             />
             <path d="M11 15.5H17" stroke="white" strokeWidth="2" strokeLinecap="round" />
           </svg>
-          <span className="font-display text-lg font-semibold text-[#0A0A0A]">
-            VantageUI</span>
+          <span className="font-display text-lg font-semibold text-[#0A0A0A]">VantageUI</span>
         </a>
 
         {/* Desktop nav */}
